@@ -18,8 +18,8 @@ part 'trip_planner_bloc.freezed.dart';
 
 class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
   final PlacesRepository _placesRepository;
-  static const _debounceTime = Duration(milliseconds: 800);
-  static const _minDistanceToFetch = 500.0;
+  static const _debounceTime = Duration(milliseconds: 300);
+  static const _minDistanceToFetch = 300.0;
   static const _maxDestinations = 5;
   Function(Place)? onPlaceMarkerTap;
   bool _isProcessingDestination = false;
@@ -28,19 +28,27 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
       : super(const TripPlannerState.initial()) {
     on<_Started>(_onStarted);
     on<_MapCreated>(_onMapCreated);
-    on<_CameraMoved>(_onCameraMoved, transformer: throttle(_debounceTime));
+    on<_CameraMoved>(_onCameraMoved,
+        transformer: _debounceAndThrottle(_debounceTime));
     on<_ToggleCategory>(_onToggleCategory);
     on<_AddDestination>(_onAddDestination);
     on<_RemoveDestination>(_onRemoveDestination);
     on<_SearchPlace>(_onSearchPlace);
     on<_ClearDestinations>(_onClearDestinations);
+    on<_RecalculateRoute>(_onRecalculateRoute);
   }
 
-  EventTransformer<T> throttle<T>(Duration duration) {
-    return (events, mapper) =>
-        events.throttleTime(duration).asyncExpand(mapper);
+  /// Debounce and throttle events to prevent multiple requests
+  /// within a short period of time.
+  EventTransformer<T> _debounceAndThrottle<T>(Duration duration) {
+    return (events, mapper) => events
+        .throttleTime(duration)
+        .debounceTime(duration)
+        .asyncExpand(mapper);
   }
 
+  /// Returns true if more destinations can be added.
+  /// The limit is set to 5 destinations.
   bool get canAddMoreDestinations {
     if (state is! _Loaded) return false;
     return (state as _Loaded).destinationsMap.length < _maxDestinations;
@@ -107,21 +115,25 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
     }
 
     try {
+      /// Calculate radius based on zoom level
       final radius = _calculateRadius(
           await currentState.mapController?.getZoomLevel() ?? 12.0);
 
+      /// Fetch nearby places
       final places = await _placesRepository.getNearbyPlaces(
         event.position,
         radius,
         categories: currentState.selectedCategories,
       );
 
+      /// Update nearby places map for caching
       final newPlacesMap =
           Map<String, Place>.from(currentState.nearbyPlacesMap);
       for (final place in places) {
         newPlacesMap[place.id] = place;
       }
 
+      /// Remove places that are too far away because of prevent memory leaks
       newPlacesMap.removeWhere((_, place) {
         if (currentState.destinationsMap.containsKey(place.id)) return false;
         return _calculateDistance(
@@ -129,6 +141,7 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
             5000;
       });
 
+      /// Preserve search marker if exists
       Marker? searchMarker;
       for (final marker in currentState.markers) {
         if (marker.markerId.value == 'search_result') {
@@ -137,24 +150,57 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
         }
       }
 
+      /// Update markers
       final updatedMarkers = _createMarkers(
         newPlacesMap.values.toList(),
         currentState.destinationsMap.values.toList(),
       );
 
+      /// Add search marker back if exists
       if (searchMarker != null) {
         updatedMarkers.add(searchMarker);
       }
 
+      /// Update state
       emit(currentState.copyWith(
         markers: updatedMarkers,
         nearbyPlacesMap: newPlacesMap,
         lastFetchPosition: event.position,
         destinationsMap: currentState.destinationsMap,
         routes: currentState.routes,
+        isLoading: false,
       ));
     } catch (e) {
-      log('Error fetching places: $e');
+      if (!isClosed) {
+        emit(currentState.copyWith(
+          isLoading: false,
+        ));
+      }
+    }
+  }
+
+  Future<void> _onRecalculateRoute(
+      _RecalculateRoute event, Emitter<TripPlannerState> emit) async {
+    if (state is! _Loaded) return;
+    final currentState = state as _Loaded;
+
+    try {
+      emit(currentState.copyWith(isLoading: true));
+
+      final routes =
+          await _createRoutes(currentState.destinationsMap.values.toList());
+
+      if (!emit.isDone) {
+        emit(currentState.copyWith(
+          routes: routes,
+          isLoading: false,
+        ));
+      }
+    } catch (e) {
+      log('Failed to recalculate route: $e');
+      if (!emit.isDone) {
+        emit(currentState.copyWith(isLoading: false));
+      }
     }
   }
 

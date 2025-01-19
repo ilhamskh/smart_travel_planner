@@ -15,7 +15,6 @@ class MapSearchBar extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top + 8,
-        left: 16,
         right: 16,
       ),
       height: 56,

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
 
 class TripPlanBar extends StatelessWidget {
   final List<Place> destinations;
   final Function(int) onRemoveDestination;
-  
+  final Function() onAddTrip;
+
   const TripPlanBar({
     required this.destinations,
     required this.onRemoveDestination,
+    required this.onAddTrip,
     super.key,
   });
 
@@ -16,13 +17,13 @@ class TripPlanBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: destinations.isEmpty ? 0 : 120,
+      height: destinations.isEmpty ? 0 : 180,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -44,6 +45,14 @@ class TripPlanBar extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const Spacer(),
+                Text(
+                  '${destinations.length} destinations',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -62,9 +71,24 @@ class TripPlanBar extends StatelessWidget {
                 ),
               ),
             ),
+            if (destinations.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blue,
+                  minimumSize: const Size(double.infinity, 0)
+                ),
+                onPressed: () {},
+                child: Text(
+                  'Add Trip',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ]
           ],
         ),
       ),
     );
   }
-} 
+}

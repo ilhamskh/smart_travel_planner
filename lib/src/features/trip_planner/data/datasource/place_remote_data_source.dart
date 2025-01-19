@@ -37,7 +37,7 @@ class PlaceRemoteDataSource implements PlaceDataSource {
                 'latitude': lat,
                 'longitude': lng,
               },
-              'radius': radius.toInt(),
+              'radius': radius,
             },
           },
           if (categories != null && categories.isNotEmpty)

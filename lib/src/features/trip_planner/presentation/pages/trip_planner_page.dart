@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_travel_planner/src/core/utils/debouncer.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/presentation/bloc/trip_planner_bloc.dart';
+import 'package:smart_travel_planner/src/features/trip_planner/presentation/widget/search_bar.dart';
 import 'package:smart_travel_planner/src/injection/widget/dependencies_scope.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/presentation/widget/place_details_bottom_sheet.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/presentation/widget/trip_plan_bar.dart';
@@ -36,27 +37,34 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
         DependenciesScope.of(context).placesRepository,
       )..add(const TripPlannerEvent.started()),
       child: BlocBuilder<TripPlannerBloc, TripPlannerState>(
+        buildWhen: (previous, current) => _shouldRebuild(previous, current),
         builder: (context, state) {
           final bloc = context.read<TripPlannerBloc>();
-          bloc.onPlaceMarkerTap = (place) => _showPlaceDetailsBottomSheet(context, place);
+          bloc.onPlaceMarkerTap =
+              (place) => _showPlaceDetailsBottomSheet(context, place);
           return Scaffold(
             body: state.when(
               initial: () => const Center(child: CircularProgressIndicator()),
               loading: () => const Center(child: CircularProgressIndicator()),
-              loaded: (controller, markers, nearbyPlaces, destinations, position, lastFetch, categories, routes, isLoading) {
+              loaded: (controller, markers, nearbyPlaces, destinations,
+                  position, lastFetch, categories, routes, isLoading) {
                 return Stack(
                   children: [
                     GoogleMap(
                       onMapCreated: (controller) {
                         controller.setMapStyle(_mapStyle);
-                        context.read<TripPlannerBloc>().add(TripPlannerEvent.mapCreated(controller));
+                        context
+                            .read<TripPlannerBloc>()
+                            .add(TripPlannerEvent.mapCreated(controller));
                       },
-                      initialCameraPosition: CameraPosition(target: position, zoom: 15),
+                      initialCameraPosition:
+                          CameraPosition(target: position, zoom: 15),
                       markers: markers,
                       polylines: routes,
                       myLocationEnabled: true,
                       myLocationButtonEnabled: true,
-                      onCameraMove: (position) => _onCameraMove(context, position),
+                      onCameraMove: (position) =>
+                          _onCameraMove(context, position),
                     ),
                     SafeArea(
                       child: Column(
@@ -64,19 +72,17 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: SearchBar(
+                                  child: MapSearchBar(
                                     controller: _searchController,
-                                    hintText: 'Search places...',
-                                    leading: const Icon(Icons.search),
-                                    onSubmitted: (query) {
-                                      if (query.isNotEmpty) {
-                                        context.read<TripPlannerBloc>().add(
-                                              TripPlannerEvent.searchPlace(
-                                                  query),
-                                            );
-                                      }
+                                    onSearch: () {
+                                      bloc.add(
+                                        TripPlannerEvent.searchPlace(
+                                          _searchController.text,
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
@@ -84,7 +90,22 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
                                 IconButton(
                                   onPressed: () =>
                                       _showCategoriesBottomSheet(context),
-                                  icon: const Icon(Icons.filter_list),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStateProperty.all(Colors.white),
+                                    shape: WidgetStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    padding: WidgetStateProperty.all(
+                                      EdgeInsets.all(12),
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.filter_list,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ],
                             ),
@@ -94,11 +115,52 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
                               destinations: destinations.values.toList(),
                               onRemoveDestination: (index) {
                                 context.read<TripPlannerBloc>().add(
-                                      TripPlannerEvent.removeDestination(
-                                          index),
+                                      TripPlannerEvent.removeDestination(index),
                                     );
                               },
+                              onAddTrip: () {},
                             ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      right: 16,
+                      bottom: 16,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Reset Map FAB
+                          FloatingActionButton.small(
+                            heroTag: 'reset_map',
+                            onPressed: () => controller?.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(target: position, zoom: 15),
+                              ),
+                            ),
+                            child: const Icon(Icons.my_location),
+                          ),
+                          const SizedBox(height: 8),
+
+                          // Recalculate Route FAB
+                          if (destinations.isNotEmpty)
+                            FloatingActionButton.small(
+                              heroTag: 'recalculate',
+                              onPressed: () => bloc.add(
+                                const TripPlannerEvent.recalculateRoute(),
+                              ),
+                              child: const Icon(Icons.refresh),
+                            ),
+                          if (destinations.isNotEmpty)
+                            const SizedBox(height: 8),
+
+                          // New Trip FAB
+                          FloatingActionButton(
+                            heroTag: 'new_trip',
+                            onPressed: () => bloc.add(
+                              const TripPlannerEvent.clearDestinations(),
+                            ),
+                            child: const Icon(Icons.add),
+                          ),
                         ],
                       ),
                     ),
@@ -120,6 +182,29 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
     );
   }
 
+  bool _shouldRebuild(TripPlannerState previous, TripPlannerState current) {
+    return current.maybeWhen(
+      loaded: (mapController, markers, nearbyPlaces, destinations, position,
+          lastFetch, categories, routes, isLoading) {
+        return previous.maybeWhen(
+          loaded: (prevController,
+              prevMarkers,
+              prevPlaces,
+              prevDestinations,
+              prevPosition,
+              prevLastFetch,
+              prevCategories,
+              prevRoutes,
+              prevLoading) {
+            return prevMarkers != markers || prevLoading != isLoading;
+          },
+          orElse: () => true,
+        );
+      },
+      orElse: () => previous.runtimeType != current.runtimeType,
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -131,8 +216,8 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
     _mapDebouncer(() {
       if (!mounted) return;
       context.read<TripPlannerBloc>().add(
-        TripPlannerEvent.cameraMoved(position.target),
-      );
+            TripPlannerEvent.cameraMoved(position.target),
+          );
     });
   }
 
@@ -154,7 +239,7 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
 
   void _showCategoriesBottomSheet(BuildContext context) {
     final bloc = context.read<TripPlannerBloc>();
-    
+
     showModalBottomSheet(
       context: context,
       builder: (bottomSheetContext) => BlocProvider.value(
@@ -162,13 +247,14 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
         child: BlocBuilder<TripPlannerBloc, TripPlannerState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loaded: (_, __, ___, ____, _____, ______, categories, _______, ________) {
+              loaded: (_, __, ___, ____, _____, ______, categories, _______,
+                  ________) {
                 return CategoriesBottomSheet(
                   selectedCategories: categories,
                   onCategorySelected: (category) {
                     context.read<TripPlannerBloc>().add(
-                      TripPlannerEvent.toggleCategory(category),
-                    );
+                          TripPlannerEvent.toggleCategory(category),
+                        );
                   },
                 );
               },

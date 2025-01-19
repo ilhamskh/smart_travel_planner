@@ -10,4 +10,5 @@ class TripPlannerEvent with _$TripPlannerEvent {
   const factory TripPlannerEvent.searchPlace(String query) = _SearchPlace;
   const factory TripPlannerEvent.removeDestination(int index) = _RemoveDestination;
   const factory TripPlannerEvent.clearDestinations() = _ClearDestinations;
+  const factory TripPlannerEvent.recalculateRoute() = _RecalculateRoute;
 }

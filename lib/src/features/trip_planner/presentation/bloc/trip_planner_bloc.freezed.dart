@@ -26,6 +26,7 @@ mixin _$TripPlannerEvent {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +39,7 @@ mixin _$TripPlannerEvent {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +52,7 @@ mixin _$TripPlannerEvent {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,6 +66,7 @@ mixin _$TripPlannerEvent {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,6 +79,7 @@ mixin _$TripPlannerEvent {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -87,6 +92,7 @@ mixin _$TripPlannerEvent {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -162,6 +168,7 @@ class _$StartedImpl implements _Started {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return started();
   }
@@ -177,6 +184,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return started?.call();
   }
@@ -192,6 +200,7 @@ class _$StartedImpl implements _Started {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -211,6 +220,7 @@ class _$StartedImpl implements _Started {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return started(this);
   }
@@ -226,6 +236,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return started?.call(this);
   }
@@ -241,6 +252,7 @@ class _$StartedImpl implements _Started {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -331,6 +343,7 @@ class _$MapCreatedImpl implements _MapCreated {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return mapCreated(controller);
   }
@@ -346,6 +359,7 @@ class _$MapCreatedImpl implements _MapCreated {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return mapCreated?.call(controller);
   }
@@ -361,6 +375,7 @@ class _$MapCreatedImpl implements _MapCreated {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (mapCreated != null) {
@@ -380,6 +395,7 @@ class _$MapCreatedImpl implements _MapCreated {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return mapCreated(this);
   }
@@ -395,6 +411,7 @@ class _$MapCreatedImpl implements _MapCreated {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return mapCreated?.call(this);
   }
@@ -410,6 +427,7 @@ class _$MapCreatedImpl implements _MapCreated {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (mapCreated != null) {
@@ -509,6 +527,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return cameraMoved(position);
   }
@@ -524,6 +543,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return cameraMoved?.call(position);
   }
@@ -539,6 +559,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (cameraMoved != null) {
@@ -558,6 +579,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return cameraMoved(this);
   }
@@ -573,6 +595,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return cameraMoved?.call(this);
   }
@@ -588,6 +611,7 @@ class _$CameraMovedImpl implements _CameraMoved {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (cameraMoved != null) {
@@ -687,6 +711,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return toggleCategory(category);
   }
@@ -702,6 +727,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return toggleCategory?.call(category);
   }
@@ -717,6 +743,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (toggleCategory != null) {
@@ -736,6 +763,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return toggleCategory(this);
   }
@@ -751,6 +779,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return toggleCategory?.call(this);
   }
@@ -766,6 +795,7 @@ class _$ToggleCategoryImpl implements _ToggleCategory {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (toggleCategory != null) {
@@ -877,6 +907,7 @@ class _$AddDestinationImpl implements _AddDestination {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return addDestination(place);
   }
@@ -892,6 +923,7 @@ class _$AddDestinationImpl implements _AddDestination {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return addDestination?.call(place);
   }
@@ -907,6 +939,7 @@ class _$AddDestinationImpl implements _AddDestination {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (addDestination != null) {
@@ -926,6 +959,7 @@ class _$AddDestinationImpl implements _AddDestination {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return addDestination(this);
   }
@@ -941,6 +975,7 @@ class _$AddDestinationImpl implements _AddDestination {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return addDestination?.call(this);
   }
@@ -956,6 +991,7 @@ class _$AddDestinationImpl implements _AddDestination {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (addDestination != null) {
@@ -1053,6 +1089,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return searchPlace(query);
   }
@@ -1068,6 +1105,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return searchPlace?.call(query);
   }
@@ -1083,6 +1121,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (searchPlace != null) {
@@ -1102,6 +1141,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return searchPlace(this);
   }
@@ -1117,6 +1157,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return searchPlace?.call(this);
   }
@@ -1132,6 +1173,7 @@ class _$SearchPlaceImpl implements _SearchPlace {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (searchPlace != null) {
@@ -1230,6 +1272,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return removeDestination(index);
   }
@@ -1245,6 +1288,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return removeDestination?.call(index);
   }
@@ -1260,6 +1304,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (removeDestination != null) {
@@ -1279,6 +1324,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return removeDestination(this);
   }
@@ -1294,6 +1340,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return removeDestination?.call(this);
   }
@@ -1309,6 +1356,7 @@ class _$RemoveDestinationImpl implements _RemoveDestination {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (removeDestination != null) {
@@ -1379,6 +1427,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     required TResult Function(String query) searchPlace,
     required TResult Function(int index) removeDestination,
     required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
   }) {
     return clearDestinations();
   }
@@ -1394,6 +1443,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     TResult? Function(String query)? searchPlace,
     TResult? Function(int index)? removeDestination,
     TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
   }) {
     return clearDestinations?.call();
   }
@@ -1409,6 +1459,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     TResult Function(String query)? searchPlace,
     TResult Function(int index)? removeDestination,
     TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
     required TResult orElse(),
   }) {
     if (clearDestinations != null) {
@@ -1428,6 +1479,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     required TResult Function(_SearchPlace value) searchPlace,
     required TResult Function(_RemoveDestination value) removeDestination,
     required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
   }) {
     return clearDestinations(this);
   }
@@ -1443,6 +1495,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     TResult? Function(_SearchPlace value)? searchPlace,
     TResult? Function(_RemoveDestination value)? removeDestination,
     TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
   }) {
     return clearDestinations?.call(this);
   }
@@ -1458,6 +1511,7 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
     TResult Function(_SearchPlace value)? searchPlace,
     TResult Function(_RemoveDestination value)? removeDestination,
     TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
     required TResult orElse(),
   }) {
     if (clearDestinations != null) {
@@ -1469,6 +1523,153 @@ class _$ClearDestinationsImpl implements _ClearDestinations {
 
 abstract class _ClearDestinations implements TripPlannerEvent {
   const factory _ClearDestinations() = _$ClearDestinationsImpl;
+}
+
+/// @nodoc
+abstract class _$$RecalculateRouteImplCopyWith<$Res> {
+  factory _$$RecalculateRouteImplCopyWith(_$RecalculateRouteImpl value,
+          $Res Function(_$RecalculateRouteImpl) then) =
+      __$$RecalculateRouteImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RecalculateRouteImplCopyWithImpl<$Res>
+    extends _$TripPlannerEventCopyWithImpl<$Res, _$RecalculateRouteImpl>
+    implements _$$RecalculateRouteImplCopyWith<$Res> {
+  __$$RecalculateRouteImplCopyWithImpl(_$RecalculateRouteImpl _value,
+      $Res Function(_$RecalculateRouteImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TripPlannerEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$RecalculateRouteImpl implements _RecalculateRoute {
+  const _$RecalculateRouteImpl();
+
+  @override
+  String toString() {
+    return 'TripPlannerEvent.recalculateRoute()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$RecalculateRouteImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function(GoogleMapController controller) mapCreated,
+    required TResult Function(LatLng position) cameraMoved,
+    required TResult Function(PlaceCategory category) toggleCategory,
+    required TResult Function(Place place) addDestination,
+    required TResult Function(String query) searchPlace,
+    required TResult Function(int index) removeDestination,
+    required TResult Function() clearDestinations,
+    required TResult Function() recalculateRoute,
+  }) {
+    return recalculateRoute();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function(GoogleMapController controller)? mapCreated,
+    TResult? Function(LatLng position)? cameraMoved,
+    TResult? Function(PlaceCategory category)? toggleCategory,
+    TResult? Function(Place place)? addDestination,
+    TResult? Function(String query)? searchPlace,
+    TResult? Function(int index)? removeDestination,
+    TResult? Function()? clearDestinations,
+    TResult? Function()? recalculateRoute,
+  }) {
+    return recalculateRoute?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function(GoogleMapController controller)? mapCreated,
+    TResult Function(LatLng position)? cameraMoved,
+    TResult Function(PlaceCategory category)? toggleCategory,
+    TResult Function(Place place)? addDestination,
+    TResult Function(String query)? searchPlace,
+    TResult Function(int index)? removeDestination,
+    TResult Function()? clearDestinations,
+    TResult Function()? recalculateRoute,
+    required TResult orElse(),
+  }) {
+    if (recalculateRoute != null) {
+      return recalculateRoute();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_MapCreated value) mapCreated,
+    required TResult Function(_CameraMoved value) cameraMoved,
+    required TResult Function(_ToggleCategory value) toggleCategory,
+    required TResult Function(_AddDestination value) addDestination,
+    required TResult Function(_SearchPlace value) searchPlace,
+    required TResult Function(_RemoveDestination value) removeDestination,
+    required TResult Function(_ClearDestinations value) clearDestinations,
+    required TResult Function(_RecalculateRoute value) recalculateRoute,
+  }) {
+    return recalculateRoute(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_MapCreated value)? mapCreated,
+    TResult? Function(_CameraMoved value)? cameraMoved,
+    TResult? Function(_ToggleCategory value)? toggleCategory,
+    TResult? Function(_AddDestination value)? addDestination,
+    TResult? Function(_SearchPlace value)? searchPlace,
+    TResult? Function(_RemoveDestination value)? removeDestination,
+    TResult? Function(_ClearDestinations value)? clearDestinations,
+    TResult? Function(_RecalculateRoute value)? recalculateRoute,
+  }) {
+    return recalculateRoute?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_MapCreated value)? mapCreated,
+    TResult Function(_CameraMoved value)? cameraMoved,
+    TResult Function(_ToggleCategory value)? toggleCategory,
+    TResult Function(_AddDestination value)? addDestination,
+    TResult Function(_SearchPlace value)? searchPlace,
+    TResult Function(_RemoveDestination value)? removeDestination,
+    TResult Function(_ClearDestinations value)? clearDestinations,
+    TResult Function(_RecalculateRoute value)? recalculateRoute,
+    required TResult orElse(),
+  }) {
+    if (recalculateRoute != null) {
+      return recalculateRoute(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _RecalculateRoute implements TripPlannerEvent {
+  const factory _RecalculateRoute() = _$RecalculateRouteImpl;
 }
 
 /// @nodoc

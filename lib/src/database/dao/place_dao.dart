@@ -21,6 +21,14 @@ class PlaceDao extends DatabaseAccessor<AppDatabase> with _$PlaceDaoMixin {
   Future<int> createPlace(PlaceTableCompanion place) =>
       into(placeTable).insert(place);
 
+  Future<void> createPlaces(List<PlaceTableCompanion> places) async {
+    await batch((batch) {
+      for (var place in places) {
+        batch.insert(placeTable, place);
+      }
+    });
+  }
+
   Future<bool> updatePlace(PlaceTableData place) =>
       update(placeTable).replace(place);
 

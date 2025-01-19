@@ -1,7 +1,7 @@
-import 'dart:math';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_travel_planner/src/core/error/exceptions.dart';
 import 'package:smart_travel_planner/src/core/services/network_info_service.dart';
+import 'package:smart_travel_planner/src/database/dao/place_dao.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/data/datasource/place_data_source.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place_category.dart';
@@ -10,14 +10,16 @@ import 'package:smart_travel_planner/src/features/trip_planner/domain/repository
 class PlacesRepositoryImpl implements PlacesRepository {
   final PlaceDataSource _remoteDataSource;
   final NetworkInfoService _networkInfoService;
-  
-  final _viewportCache = <String, List<Place>>{};
-  static const _maxPlacesPerViewport = 30;
-  static const _gridPrecision = 3;
+  final PlaceDao _placeDao;
+
+  static const minRadius = 500.0;
+  static const maxRadius = 5000.0;
+  static const maxPlacesPerRequest = 20;
 
   PlacesRepositoryImpl(
     this._remoteDataSource,
     this._networkInfoService,
+    this._placeDao,
   );
 
   @override
@@ -28,30 +30,27 @@ class PlacesRepositoryImpl implements PlacesRepository {
   }) async {
     try {
       if (!await _networkInfoService.isConnected) {
+        final cachedPlaces = await _placeDao.getAllPlaces();
+
+        if (cachedPlaces.isNotEmpty) {
+          return cachedPlaces.map((p) => p.toEntity()).toList();
+        }
         throw NetworkException('No internet connection available');
       }
 
-      final viewportKey = _generateViewportKey(position, radius);
-
-      if (_viewportCache.containsKey(viewportKey)) {
-        return _viewportCache[viewportKey]!;
-      }
+      final optimizedRadius = radius.clamp(minRadius, maxRadius);
 
       final places = await _remoteDataSource.getNearbyPlaces(
         position.latitude,
         position.longitude,
-        radius,
+        optimizedRadius,
         categories: categories,
       );
 
-      if (places.isEmpty) {
-        throw NoPlacesFoundException();
-      }
+      await _placeDao.createPlaces(places.map((p) => p.toCompanion()).toList());
 
-      final nearestPlaces = _getNearestPlaces(places, position);
-      _viewportCache[viewportKey] = nearestPlaces;
-
-      return nearestPlaces;
+      // Limit number of places for better performance
+      return places.take(maxPlacesPerRequest).toList();
     } catch (e) {
       rethrow;
     }
@@ -83,45 +82,6 @@ class PlacesRepositoryImpl implements PlacesRepository {
     }
   }
 
-  String _generateViewportKey(
-    LatLng position,
-    double radius,
-  ) {
-    final lat = position.latitude.toStringAsFixed(_gridPrecision);
-    final lng = position.longitude.toStringAsFixed(_gridPrecision);
-    return '$lat:$lng:$radius';
-  }
-
-  List<Place> _getNearestPlaces(List<Place> places, LatLng center) {
-    return places
-      ..sort((a, b) {
-        final distA = _calculateDistance(
-          center,
-          LatLng(a.latitude, a.longitude),
-        );
-        final distB = _calculateDistance(
-          center,
-          LatLng(b.latitude, b.longitude),
-        );
-        return distA.compareTo(distB);
-      })
-      ..take(_maxPlacesPerViewport).toList();
-  }
-
-  double _calculateDistance(LatLng from, LatLng to) {
-    const earthRadius = 6371000; // meters
-    final lat1 = from.latitude * pi / 180;
-    final lat2 = to.latitude * pi / 180;
-    final dLat = (to.latitude - from.latitude) * pi / 180;
-    final dLon = (to.longitude - from.longitude) * pi / 180;
-
-    final a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
-    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
-
-    return earthRadius * c;
-  }
-  
   @override
   Future<List<LatLng>> getRouteBetweenPoints(
     LatLng origin,

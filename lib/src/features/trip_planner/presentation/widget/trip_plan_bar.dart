@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
+import 'package:smart_travel_planner/src/features/trip_planner/presentation/bloc/trip_planner_bloc.dart';
 
 class TripPlanBar extends StatelessWidget {
   final List<Place> destinations;
@@ -77,11 +79,14 @@ class TripPlanBar extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 0)
+                  minimumSize: const Size(
+                    double.infinity,
+                    0,
+                  ),
                 ),
-                onPressed: () {},
-                child: Text(
-                  'Add Trip',
+                onPressed: () => _showSaveTripDialog(context),
+                child: const Text(
+                  'Save Trip',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -90,5 +95,43 @@ class TripPlanBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showSaveTripDialog(BuildContext context) async {
+    final nameController = TextEditingController();
+
+    final shouldSave = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Save Trip'),
+        content: TextField(
+          controller: nameController,
+          decoration: const InputDecoration(
+            labelText: 'Trip Name',
+            hintText: 'Enter a name for your trip',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldSave == true && nameController.text.isNotEmpty) {
+      onAddTrip();
+      context.read<TripPlannerBloc>().add(
+            TripPlannerEvent.saveTrip(
+              nameController.text,
+              destinations,
+            ),
+          );
+    }
   }
 }

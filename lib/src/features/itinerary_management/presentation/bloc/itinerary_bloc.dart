@@ -16,7 +16,7 @@ class ItineraryBloc extends Bloc<ItineraryEvent, ItineraryState> {
     on<_CreateTrip>(_onCreateTrip);
     on<_DeleteTrip>(_onDeleteTrip);
     on<_UpdateTrip>(_onUpdateTrip);
-    on<_ReorderPlaces>(_onReorderPlaces);
+    on<_ReorderTrips>(_onReorderTrips);
   }
 
   Future<void> _onStarted(_Started event, Emitter<ItineraryState> emit) async {
@@ -65,20 +65,25 @@ class ItineraryBloc extends Bloc<ItineraryEvent, ItineraryState> {
     }
   }
 
-  Future<void> _onReorderPlaces(_ReorderPlaces event, Emitter<ItineraryState> emit) async {
-    final currentState = state;
-    if (currentState is! _Loaded) return;
+Future<void> _onReorderTrips(_ReorderTrips event, Emitter<ItineraryState> emit) async {
+  final currentState = state;
+  if (currentState is! _Loaded) return;
 
-    try {
-      final trip = currentState.trips.firstWhere((t) => t.id == event.tripId);
-      final places = List<Place>.from(trip.places);
-      final item = places.removeAt(event.oldIndex);
-      places.insert(event.newIndex, item);
+  try {
+    final trips = List<Trip>.from(currentState.trips);
+    final item = trips.removeAt(event.oldIndex);
+    trips.insert(event.newIndex, item);
 
-      await _tripRepository.updateTrip(trip.copyWith(places: places));
-      add(const ItineraryEvent.started());
-    } catch (e) {
-      emit(ItineraryState.error(e.toString()));
-    }
+    // Update trip order in database
+    await Future.wait(
+      trips.asMap().entries.map((entry) => 
+        _tripRepository.updateTripOrder(entry.value.id, entry.key)
+      ),
+    );
+
+    emit(ItineraryState.loaded(trips));
+  } catch (e) {
+    emit(ItineraryState.error(e.toString()));
   }
+}
 }

@@ -6,4 +6,5 @@ abstract interface class TripRepository {
   Future<int> createTrip(Trip trip);
   Future<bool> updateTrip(Trip trip);
   Future<int> deleteTrip(int id);
+  Future<bool> updateTripOrder(int tripId, int order);
 }

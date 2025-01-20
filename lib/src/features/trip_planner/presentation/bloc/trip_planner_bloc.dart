@@ -10,7 +10,9 @@ import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place_category.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
+import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/trip.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/repository/places_repository.dart';
+import 'package:smart_travel_planner/src/features/trip_planner/domain/repository/trip_repository.dart';
 
 part 'trip_planner_event.dart';
 part 'trip_planner_state.dart';
@@ -18,13 +20,14 @@ part 'trip_planner_bloc.freezed.dart';
 
 class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
   final PlacesRepository _placesRepository;
+  final TripRepository _tripRepository;
   static const _debounceTime = Duration(milliseconds: 300);
   static const _minDistanceToFetch = 300.0;
   static const _maxDestinations = 5;
   Function(Place)? onPlaceMarkerTap;
   bool _isProcessingDestination = false;
 
-  TripPlannerBloc(this._placesRepository)
+  TripPlannerBloc(this._placesRepository, this._tripRepository)
       : super(const TripPlannerState.initial()) {
     on<_Started>(_onStarted);
     on<_MapCreated>(_onMapCreated);
@@ -36,6 +39,7 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
     on<_SearchPlace>(_onSearchPlace);
     on<_ClearDestinations>(_onClearDestinations);
     on<_RecalculateRoute>(_onRecalculateRoute);
+    on<_SaveTrip>(_onSaveTrip);
   }
 
   /// Debounce and throttle events to prevent multiple requests
@@ -176,6 +180,42 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
           isLoading: false,
         ));
       }
+    }
+  }
+
+  Future<void> _onSaveTrip(
+      _SaveTrip event, Emitter<TripPlannerState> emit) async {
+    if (state is! _Loaded) return;
+    final currentState = state as _Loaded;
+
+    try {
+      final trip = Trip(
+        id: 0,
+        name: event.name,
+        places: event.places,
+        startDate: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      // Create trip first to get ID
+      final tripId = await _tripRepository.createTrip(trip);
+
+      // Update trip with places
+      final tripWithId = trip.copyWith(id: tripId);
+      await _tripRepository.updateTrip(tripWithId);
+
+      // Clear destinations after saving
+      emit(currentState.copyWith(
+        destinationsMap: const {},
+        routes: const {},
+        markers: _createMarkers(
+          currentState.nearbyPlacesMap.values.toList(),
+          const [],
+        ),
+      ));
+    } catch (e) {
+      log('Failed to save trip: $e');
     }
   }
 
@@ -439,55 +479,57 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
     ));
   }
 
-  Future<void> _onRemoveDestination(_RemoveDestination event, Emitter<TripPlannerState> emit) async {
-  if (state is! _Loaded) return;
-  final currentState = state as _Loaded;
+  Future<void> _onRemoveDestination(
+      _RemoveDestination event, Emitter<TripPlannerState> emit) async {
+    if (state is! _Loaded) return;
+    final currentState = state as _Loaded;
 
-  try {
-    // Remove destination
-    final oldDestinations = currentState.destinationsMap.values.toList();
-    final placeId = oldDestinations[event.index].id;
-    final updatedDestinations = Map<String, Place>.from(currentState.destinationsMap)
-      ..remove(placeId);
-    
-    final destinations = updatedDestinations.values.toList();
-    final updatedRoutes = <Polyline>{};
+    try {
+      // Remove destination
+      final oldDestinations = currentState.destinationsMap.values.toList();
+      final placeId = oldDestinations[event.index].id;
+      final updatedDestinations =
+          Map<String, Place>.from(currentState.destinationsMap)
+            ..remove(placeId);
 
-    // Rebuild routes for remaining destinations
-    if (destinations.length >= 2) {
-      for (var i = 0; i < destinations.length - 1; i++) {
-        final origin = destinations[i];
-        final destination = destinations[i + 1];
-        
-        final routePoints = await _placesRepository.getRouteBetweenPoints(
-          LatLng(origin.latitude, origin.longitude),
-          LatLng(destination.latitude, destination.longitude),
-        );
+      final destinations = updatedDestinations.values.toList();
+      final updatedRoutes = <Polyline>{};
 
-        updatedRoutes.add(
-          Polyline(
-            polylineId: PolylineId('route_${origin.id}_${destination.id}'),
-            points: routePoints,
-            color: Colors.blue,
-            width: 5,
-            geodesic: true,
-          ),
-        );
+      // Rebuild routes for remaining destinations
+      if (destinations.length >= 2) {
+        for (var i = 0; i < destinations.length - 1; i++) {
+          final origin = destinations[i];
+          final destination = destinations[i + 1];
+
+          final routePoints = await _placesRepository.getRouteBetweenPoints(
+            LatLng(origin.latitude, origin.longitude),
+            LatLng(destination.latitude, destination.longitude),
+          );
+
+          updatedRoutes.add(
+            Polyline(
+              polylineId: PolylineId('route_${origin.id}_${destination.id}'),
+              points: routePoints,
+              color: Colors.blue,
+              width: 5,
+              geodesic: true,
+            ),
+          );
+        }
       }
-    }
 
-    emit(currentState.copyWith(
-      destinationsMap: updatedDestinations,
-      routes: updatedRoutes,
-      markers: _createMarkers(
-        currentState.nearbyPlacesMap.values.toList(),
-        destinations,
-      ),
-    ));
-  } catch (e) {
-    log('Failed to remove destination: $e');
+      emit(currentState.copyWith(
+        destinationsMap: updatedDestinations,
+        routes: updatedRoutes,
+        markers: _createMarkers(
+          currentState.nearbyPlacesMap.values.toList(),
+          destinations,
+        ),
+      ));
+    } catch (e) {
+      log('Failed to remove destination: $e');
+    }
   }
-}
 
   Marker _createPlaceMarker(Place place) {
     return Marker(

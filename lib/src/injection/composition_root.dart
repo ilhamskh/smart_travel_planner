@@ -14,9 +14,13 @@ final class CompositionRoot {
   Future<CompositionResult> compose() async {
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((record) {
-      debugPrintThrottled(
-        '${record.level.name}: ${record.time}: ${record.message}',
-      );
+      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+      if (record.error != null) {
+        debugPrint('Error: ${record.error}');
+      }
+      if (record.stackTrace != null) {
+        debugPrint('Stack trace:\n${record.stackTrace}');
+      }
     });
 
     final stopwatch = clock.stopwatch()..start();
@@ -28,18 +32,14 @@ final class CompositionRoot {
     stopwatch.stop();
     logger.finest('Global Dependencies initialized in ${stopwatch.elapsed}');
 
-    final result = CompositionResult(
-      dependencies: globalDependencies
-    );
+    final result = CompositionResult(dependencies: globalDependencies);
 
     return result;
   }
 }
 
 class CompositionResult {
-  const CompositionResult(
-    {required this.dependencies}
-  );
+  const CompositionResult({required this.dependencies});
 
   final DependenciesContainer dependencies;
 }

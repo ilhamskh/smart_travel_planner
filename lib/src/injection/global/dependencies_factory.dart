@@ -5,9 +5,11 @@ import 'package:logging/logging.dart';
 import 'package:smart_travel_planner/src/core/services/network_info_service.dart';
 import 'package:smart_travel_planner/src/core/utils/logging_interceptor.dart';
 import 'package:smart_travel_planner/src/database/dao/place_dao.dart';
+import 'package:smart_travel_planner/src/database/dao/trip_dao.dart';
 import 'package:smart_travel_planner/src/database/drift_database.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/data/datasource/place_remote_data_source.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/data/repository/places_repository_impl.dart';
+import 'package:smart_travel_planner/src/features/trip_planner/data/repository/trip_repository_impl.dart';
 import 'package:smart_travel_planner/src/injection/config.dart';
 import 'package:smart_travel_planner/src/injection/factories.dart';
 import 'package:smart_travel_planner/src/injection/global/dependencies_container.dart';
@@ -35,9 +37,7 @@ class GlobalDependenciesFactory extends Factory<DependenciesContainer> {
         config.googleMapsApiKey,
       );
 
-      final database = AppDatabase(
-        NativeDatabase.memory(),
-      );
+      final database = AppDatabase();
 
       final placeDao = PlaceDao(database);
 
@@ -47,10 +47,16 @@ class GlobalDependenciesFactory extends Factory<DependenciesContainer> {
         placeDao,
       );
 
+      final tripRepository = TripRepositoryImpl(
+        TripDao(database),
+        placeDao,
+      );
+
       return DependenciesContainer(
         dioClient: client,
         networkInfoService: networkInfoService,
         placesRepository: placesRepository,
+        tripRepository: tripRepository,
         appDatabase: database,
       );
     } catch (e, stackTrace) {

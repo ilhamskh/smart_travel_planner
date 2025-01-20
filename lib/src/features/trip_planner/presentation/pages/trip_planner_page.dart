@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_travel_planner/src/core/utils/debouncer.dart';
 import 'package:smart_travel_planner/src/features/trip_planner/domain/entity/place.dart';
@@ -35,6 +36,7 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
     return BlocProvider(
       create: (context) => TripPlannerBloc(
         DependenciesScope.of(context).placesRepository,
+        DependenciesScope.of(context).tripRepository,
       )..add(const TripPlannerEvent.started()),
       child: BlocBuilder<TripPlannerBloc, TripPlannerState>(
         buildWhen: (previous, current) => _shouldRebuild(previous, current),
@@ -118,7 +120,9 @@ class _TripPlannerPageState extends State<TripPlannerPage> {
                                       TripPlannerEvent.removeDestination(index),
                                     );
                               },
-                              onAddTrip: () {},
+                              onAddTrip: () {
+                                context.go('/itinerary');
+                              },
                             ),
                         ],
                       ),

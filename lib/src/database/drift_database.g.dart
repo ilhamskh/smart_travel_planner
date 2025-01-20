@@ -29,6 +29,14 @@ class $TripTableTable extends TripTable
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
       'description', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _displayOrderMeta =
+      const VerificationMeta('displayOrder');
+  @override
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+      'display_order', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   static const VerificationMeta _startDateMeta =
       const VerificationMeta('startDate');
   @override
@@ -54,8 +62,16 @@ class $TripTableTable extends TripTable
       'updated_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, description, startDate, endDate, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        description,
+        displayOrder,
+        startDate,
+        endDate,
+        createdAt,
+        updatedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -80,6 +96,12 @@ class $TripTableTable extends TripTable
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('display_order')) {
+      context.handle(
+          _displayOrderMeta,
+          displayOrder.isAcceptableOrUnknown(
+              data['display_order']!, _displayOrderMeta));
     }
     if (data.containsKey('start_date')) {
       context.handle(_startDateMeta,
@@ -118,6 +140,8 @@ class $TripTableTable extends TripTable
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      displayOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}display_order'])!,
       startDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
       endDate: attachedDatabase.typeMapping
@@ -139,6 +163,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
   final int id;
   final String name;
   final String? description;
+  final int displayOrder;
   final DateTime startDate;
   final DateTime? endDate;
   final DateTime createdAt;
@@ -147,6 +172,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
       {required this.id,
       required this.name,
       this.description,
+      required this.displayOrder,
       required this.startDate,
       this.endDate,
       required this.createdAt,
@@ -159,6 +185,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
+    map['display_order'] = Variable<int>(displayOrder);
     map['start_date'] = Variable<DateTime>(startDate);
     if (!nullToAbsent || endDate != null) {
       map['end_date'] = Variable<DateTime>(endDate);
@@ -175,6 +202,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
+      displayOrder: Value(displayOrder),
       startDate: Value(startDate),
       endDate: endDate == null && nullToAbsent
           ? const Value.absent()
@@ -191,6 +219,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime?>(json['endDate']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -204,6 +233,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
+      'displayOrder': serializer.toJson<int>(displayOrder),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime?>(endDate),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -215,6 +245,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
           {int? id,
           String? name,
           Value<String?> description = const Value.absent(),
+          int? displayOrder,
           DateTime? startDate,
           Value<DateTime?> endDate = const Value.absent(),
           DateTime? createdAt,
@@ -223,6 +254,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
         id: id ?? this.id,
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
+        displayOrder: displayOrder ?? this.displayOrder,
         startDate: startDate ?? this.startDate,
         endDate: endDate.present ? endDate.value : this.endDate,
         createdAt: createdAt ?? this.createdAt,
@@ -234,6 +266,9 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
       name: data.name.present ? data.name.value : this.name,
       description:
           data.description.present ? data.description.value : this.description,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
       startDate: data.startDate.present ? data.startDate.value : this.startDate,
       endDate: data.endDate.present ? data.endDate.value : this.endDate,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -247,6 +282,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('createdAt: $createdAt, ')
@@ -256,8 +292,8 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, name, description, startDate, endDate, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, name, description, displayOrder,
+      startDate, endDate, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -265,6 +301,7 @@ class TripTableData extends DataClass implements Insertable<TripTableData> {
           other.id == this.id &&
           other.name == this.name &&
           other.description == this.description &&
+          other.displayOrder == this.displayOrder &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.createdAt == this.createdAt &&
@@ -275,6 +312,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
   final Value<int> id;
   final Value<String> name;
   final Value<String?> description;
+  final Value<int> displayOrder;
   final Value<DateTime> startDate;
   final Value<DateTime?> endDate;
   final Value<DateTime> createdAt;
@@ -283,6 +321,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.description = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -292,6 +331,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
     this.id = const Value.absent(),
     required String name,
     this.description = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     required DateTime startDate,
     this.endDate = const Value.absent(),
     required DateTime createdAt,
@@ -304,6 +344,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? description,
+    Expression<int>? displayOrder,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
     Expression<DateTime>? createdAt,
@@ -313,6 +354,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (description != null) 'description': description,
+      if (displayOrder != null) 'display_order': displayOrder,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
       if (createdAt != null) 'created_at': createdAt,
@@ -324,6 +366,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
       {Value<int>? id,
       Value<String>? name,
       Value<String?>? description,
+      Value<int>? displayOrder,
       Value<DateTime>? startDate,
       Value<DateTime?>? endDate,
       Value<DateTime>? createdAt,
@@ -332,6 +375,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
+      displayOrder: displayOrder ?? this.displayOrder,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       createdAt: createdAt ?? this.createdAt,
@@ -350,6 +394,9 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (displayOrder.present) {
+      map['display_order'] = Variable<int>(displayOrder.value);
     }
     if (startDate.present) {
       map['start_date'] = Variable<DateTime>(startDate.value);
@@ -372,6 +419,7 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('createdAt: $createdAt, ')
@@ -991,6 +1039,7 @@ typedef $$TripTableTableCreateCompanionBuilder = TripTableCompanion Function({
   Value<int> id,
   required String name,
   Value<String?> description,
+  Value<int> displayOrder,
   required DateTime startDate,
   Value<DateTime?> endDate,
   required DateTime createdAt,
@@ -1000,6 +1049,7 @@ typedef $$TripTableTableUpdateCompanionBuilder = TripTableCompanion Function({
   Value<int> id,
   Value<String> name,
   Value<String?> description,
+  Value<int> displayOrder,
   Value<DateTime> startDate,
   Value<DateTime?> endDate,
   Value<DateTime> createdAt,
@@ -1043,6 +1093,9 @@ class $$TripTableTableFilterComposer
 
   ColumnFilters<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get displayOrder => $composableBuilder(
+      column: $table.displayOrder, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnFilters(column));
@@ -1096,6 +1149,10 @@ class $$TripTableTableOrderingComposer
   ColumnOrderings<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get displayOrder => $composableBuilder(
+      column: $table.displayOrder,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get startDate => $composableBuilder(
       column: $table.startDate, builder: (column) => ColumnOrderings(column));
 
@@ -1126,6 +1183,9 @@ class $$TripTableTableAnnotationComposer
 
   GeneratedColumn<String> get description => $composableBuilder(
       column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<int> get displayOrder => $composableBuilder(
+      column: $table.displayOrder, builder: (column) => column);
 
   GeneratedColumn<DateTime> get startDate =>
       $composableBuilder(column: $table.startDate, builder: (column) => column);
@@ -1187,6 +1247,7 @@ class $$TripTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String?> description = const Value.absent(),
+            Value<int> displayOrder = const Value.absent(),
             Value<DateTime> startDate = const Value.absent(),
             Value<DateTime?> endDate = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
@@ -1196,6 +1257,7 @@ class $$TripTableTableTableManager extends RootTableManager<
             id: id,
             name: name,
             description: description,
+            displayOrder: displayOrder,
             startDate: startDate,
             endDate: endDate,
             createdAt: createdAt,
@@ -1205,6 +1267,7 @@ class $$TripTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String name,
             Value<String?> description = const Value.absent(),
+            Value<int> displayOrder = const Value.absent(),
             required DateTime startDate,
             Value<DateTime?> endDate = const Value.absent(),
             required DateTime createdAt,
@@ -1214,6 +1277,7 @@ class $$TripTableTableTableManager extends RootTableManager<
             id: id,
             name: name,
             description: description,
+            displayOrder: displayOrder,
             startDate: startDate,
             endDate: endDate,
             createdAt: createdAt,

@@ -22,8 +22,7 @@ mixin _$ItineraryEvent {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,7 +31,7 @@ mixin _$ItineraryEvent {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,7 +40,7 @@ mixin _$ItineraryEvent {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,7 +50,7 @@ mixin _$ItineraryEvent {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,7 +59,7 @@ mixin _$ItineraryEvent {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,7 +68,7 @@ mixin _$ItineraryEvent {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -141,8 +140,7 @@ class _$StartedImpl implements _Started {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) {
     return started();
   }
@@ -154,7 +152,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) {
     return started?.call();
   }
@@ -166,7 +164,7 @@ class _$StartedImpl implements _Started {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -182,7 +180,7 @@ class _$StartedImpl implements _Started {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) {
     return started(this);
   }
@@ -194,7 +192,7 @@ class _$StartedImpl implements _Started {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) {
     return started?.call(this);
   }
@@ -206,7 +204,7 @@ class _$StartedImpl implements _Started {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -307,8 +305,7 @@ class _$CreateTripImpl implements _CreateTrip {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) {
     return createTrip(name, places);
   }
@@ -320,7 +317,7 @@ class _$CreateTripImpl implements _CreateTrip {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) {
     return createTrip?.call(name, places);
   }
@@ -332,7 +329,7 @@ class _$CreateTripImpl implements _CreateTrip {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) {
     if (createTrip != null) {
@@ -348,7 +345,7 @@ class _$CreateTripImpl implements _CreateTrip {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) {
     return createTrip(this);
   }
@@ -360,7 +357,7 @@ class _$CreateTripImpl implements _CreateTrip {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) {
     return createTrip?.call(this);
   }
@@ -372,7 +369,7 @@ class _$CreateTripImpl implements _CreateTrip {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) {
     if (createTrip != null) {
@@ -468,8 +465,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) {
     return deleteTrip(id);
   }
@@ -481,7 +477,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) {
     return deleteTrip?.call(id);
   }
@@ -493,7 +489,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) {
     if (deleteTrip != null) {
@@ -509,7 +505,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) {
     return deleteTrip(this);
   }
@@ -521,7 +517,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) {
     return deleteTrip?.call(this);
   }
@@ -533,7 +529,7 @@ class _$DeleteTripImpl implements _DeleteTrip {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) {
     if (deleteTrip != null) {
@@ -639,8 +635,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) {
     return updateTrip(trip);
   }
@@ -652,7 +647,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) {
     return updateTrip?.call(trip);
   }
@@ -664,7 +659,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) {
     if (updateTrip != null) {
@@ -680,7 +675,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) {
     return updateTrip(this);
   }
@@ -692,7 +687,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) {
     return updateTrip?.call(this);
   }
@@ -704,7 +699,7 @@ class _$UpdateTripImpl implements _UpdateTrip {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) {
     if (updateTrip != null) {
@@ -727,20 +722,20 @@ abstract class _UpdateTrip implements ItineraryEvent {
 }
 
 /// @nodoc
-abstract class _$$ReorderPlacesImplCopyWith<$Res> {
-  factory _$$ReorderPlacesImplCopyWith(
-          _$ReorderPlacesImpl value, $Res Function(_$ReorderPlacesImpl) then) =
-      __$$ReorderPlacesImplCopyWithImpl<$Res>;
+abstract class _$$ReorderTripsImplCopyWith<$Res> {
+  factory _$$ReorderTripsImplCopyWith(
+          _$ReorderTripsImpl value, $Res Function(_$ReorderTripsImpl) then) =
+      __$$ReorderTripsImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int tripId, int oldIndex, int newIndex});
+  $Res call({int oldIndex, int newIndex});
 }
 
 /// @nodoc
-class __$$ReorderPlacesImplCopyWithImpl<$Res>
-    extends _$ItineraryEventCopyWithImpl<$Res, _$ReorderPlacesImpl>
-    implements _$$ReorderPlacesImplCopyWith<$Res> {
-  __$$ReorderPlacesImplCopyWithImpl(
-      _$ReorderPlacesImpl _value, $Res Function(_$ReorderPlacesImpl) _then)
+class __$$ReorderTripsImplCopyWithImpl<$Res>
+    extends _$ItineraryEventCopyWithImpl<$Res, _$ReorderTripsImpl>
+    implements _$$ReorderTripsImplCopyWith<$Res> {
+  __$$ReorderTripsImplCopyWithImpl(
+      _$ReorderTripsImpl _value, $Res Function(_$ReorderTripsImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of ItineraryEvent
@@ -748,15 +743,10 @@ class __$$ReorderPlacesImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tripId = null,
     Object? oldIndex = null,
     Object? newIndex = null,
   }) {
-    return _then(_$ReorderPlacesImpl(
-      null == tripId
-          ? _value.tripId
-          : tripId // ignore: cast_nullable_to_non_nullable
-              as int,
+    return _then(_$ReorderTripsImpl(
       null == oldIndex
           ? _value.oldIndex
           : oldIndex // ignore: cast_nullable_to_non_nullable
@@ -771,11 +761,9 @@ class __$$ReorderPlacesImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ReorderPlacesImpl implements _ReorderPlaces {
-  const _$ReorderPlacesImpl(this.tripId, this.oldIndex, this.newIndex);
+class _$ReorderTripsImpl implements _ReorderTrips {
+  const _$ReorderTripsImpl(this.oldIndex, this.newIndex);
 
-  @override
-  final int tripId;
   @override
   final int oldIndex;
   @override
@@ -783,15 +771,14 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
 
   @override
   String toString() {
-    return 'ItineraryEvent.reorderPlaces(tripId: $tripId, oldIndex: $oldIndex, newIndex: $newIndex)';
+    return 'ItineraryEvent.reorderTrips(oldIndex: $oldIndex, newIndex: $newIndex)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReorderPlacesImpl &&
-            (identical(other.tripId, tripId) || other.tripId == tripId) &&
+            other is _$ReorderTripsImpl &&
             (identical(other.oldIndex, oldIndex) ||
                 other.oldIndex == oldIndex) &&
             (identical(other.newIndex, newIndex) ||
@@ -799,15 +786,15 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tripId, oldIndex, newIndex);
+  int get hashCode => Object.hash(runtimeType, oldIndex, newIndex);
 
   /// Create a copy of ItineraryEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ReorderPlacesImplCopyWith<_$ReorderPlacesImpl> get copyWith =>
-      __$$ReorderPlacesImplCopyWithImpl<_$ReorderPlacesImpl>(this, _$identity);
+  _$$ReorderTripsImplCopyWith<_$ReorderTripsImpl> get copyWith =>
+      __$$ReorderTripsImplCopyWithImpl<_$ReorderTripsImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -816,10 +803,9 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     required TResult Function(String name, List<Place> places) createTrip,
     required TResult Function(int id) deleteTrip,
     required TResult Function(Trip trip) updateTrip,
-    required TResult Function(int tripId, int oldIndex, int newIndex)
-        reorderPlaces,
+    required TResult Function(int oldIndex, int newIndex) reorderTrips,
   }) {
-    return reorderPlaces(tripId, oldIndex, newIndex);
+    return reorderTrips(oldIndex, newIndex);
   }
 
   @override
@@ -829,9 +815,9 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     TResult? Function(String name, List<Place> places)? createTrip,
     TResult? Function(int id)? deleteTrip,
     TResult? Function(Trip trip)? updateTrip,
-    TResult? Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult? Function(int oldIndex, int newIndex)? reorderTrips,
   }) {
-    return reorderPlaces?.call(tripId, oldIndex, newIndex);
+    return reorderTrips?.call(oldIndex, newIndex);
   }
 
   @override
@@ -841,11 +827,11 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     TResult Function(String name, List<Place> places)? createTrip,
     TResult Function(int id)? deleteTrip,
     TResult Function(Trip trip)? updateTrip,
-    TResult Function(int tripId, int oldIndex, int newIndex)? reorderPlaces,
+    TResult Function(int oldIndex, int newIndex)? reorderTrips,
     required TResult orElse(),
   }) {
-    if (reorderPlaces != null) {
-      return reorderPlaces(tripId, oldIndex, newIndex);
+    if (reorderTrips != null) {
+      return reorderTrips(oldIndex, newIndex);
     }
     return orElse();
   }
@@ -857,9 +843,9 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     required TResult Function(_CreateTrip value) createTrip,
     required TResult Function(_DeleteTrip value) deleteTrip,
     required TResult Function(_UpdateTrip value) updateTrip,
-    required TResult Function(_ReorderPlaces value) reorderPlaces,
+    required TResult Function(_ReorderTrips value) reorderTrips,
   }) {
-    return reorderPlaces(this);
+    return reorderTrips(this);
   }
 
   @override
@@ -869,9 +855,9 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     TResult? Function(_CreateTrip value)? createTrip,
     TResult? Function(_DeleteTrip value)? deleteTrip,
     TResult? Function(_UpdateTrip value)? updateTrip,
-    TResult? Function(_ReorderPlaces value)? reorderPlaces,
+    TResult? Function(_ReorderTrips value)? reorderTrips,
   }) {
-    return reorderPlaces?.call(this);
+    return reorderTrips?.call(this);
   }
 
   @override
@@ -881,29 +867,27 @@ class _$ReorderPlacesImpl implements _ReorderPlaces {
     TResult Function(_CreateTrip value)? createTrip,
     TResult Function(_DeleteTrip value)? deleteTrip,
     TResult Function(_UpdateTrip value)? updateTrip,
-    TResult Function(_ReorderPlaces value)? reorderPlaces,
+    TResult Function(_ReorderTrips value)? reorderTrips,
     required TResult orElse(),
   }) {
-    if (reorderPlaces != null) {
-      return reorderPlaces(this);
+    if (reorderTrips != null) {
+      return reorderTrips(this);
     }
     return orElse();
   }
 }
 
-abstract class _ReorderPlaces implements ItineraryEvent {
-  const factory _ReorderPlaces(
-          final int tripId, final int oldIndex, final int newIndex) =
-      _$ReorderPlacesImpl;
+abstract class _ReorderTrips implements ItineraryEvent {
+  const factory _ReorderTrips(final int oldIndex, final int newIndex) =
+      _$ReorderTripsImpl;
 
-  int get tripId;
   int get oldIndex;
   int get newIndex;
 
   /// Create a copy of ItineraryEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ReorderPlacesImplCopyWith<_$ReorderPlacesImpl> get copyWith =>
+  _$$ReorderTripsImplCopyWith<_$ReorderTripsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

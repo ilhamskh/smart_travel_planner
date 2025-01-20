@@ -66,6 +66,7 @@ extension TripMapper on Trip {
       id: id,
       name: name,
       description: description,
+      displayOrder: 0,
       startDate: startDate,
       endDate: endDate,
       createdAt: createdAt,

@@ -23,6 +23,7 @@ mixin _$Trip {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  List<Place> get places => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   DateTime? get endDate => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $TripCopyWith<$Res> {
       {int id,
       String name,
       String? description,
+      List<Place> places,
       DateTime startDate,
       DateTime? endDate,
       DateTime createdAt,
@@ -70,6 +72,7 @@ class _$TripCopyWithImpl<$Res, $Val extends Trip>
     Object? id = null,
     Object? name = null,
     Object? description = freezed,
+    Object? places = null,
     Object? startDate = null,
     Object? endDate = freezed,
     Object? createdAt = null,
@@ -88,6 +91,10 @@ class _$TripCopyWithImpl<$Res, $Val extends Trip>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      places: null == places
+          ? _value.places
+          : places // ignore: cast_nullable_to_non_nullable
+              as List<Place>,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -119,6 +126,7 @@ abstract class _$$TripImplCopyWith<$Res> implements $TripCopyWith<$Res> {
       {int id,
       String name,
       String? description,
+      List<Place> places,
       DateTime startDate,
       DateTime? endDate,
       DateTime createdAt,
@@ -140,6 +148,7 @@ class __$$TripImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? description = freezed,
+    Object? places = null,
     Object? startDate = null,
     Object? endDate = freezed,
     Object? createdAt = null,
@@ -158,6 +167,10 @@ class __$$TripImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      places: null == places
+          ? _value._places
+          : places // ignore: cast_nullable_to_non_nullable
+              as List<Place>,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -185,10 +198,12 @@ class _$TripImpl implements _Trip {
       {required this.id,
       required this.name,
       this.description,
+      required final List<Place> places,
       required this.startDate,
       this.endDate,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt})
+      : _places = places;
 
   factory _$TripImpl.fromJson(Map<String, dynamic> json) =>
       _$$TripImplFromJson(json);
@@ -199,6 +214,14 @@ class _$TripImpl implements _Trip {
   final String name;
   @override
   final String? description;
+  final List<Place> _places;
+  @override
+  List<Place> get places {
+    if (_places is EqualUnmodifiableListView) return _places;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_places);
+  }
+
   @override
   final DateTime startDate;
   @override
@@ -210,7 +233,7 @@ class _$TripImpl implements _Trip {
 
   @override
   String toString() {
-    return 'Trip(id: $id, name: $name, description: $description, startDate: $startDate, endDate: $endDate, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Trip(id: $id, name: $name, description: $description, places: $places, startDate: $startDate, endDate: $endDate, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -222,6 +245,7 @@ class _$TripImpl implements _Trip {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            const DeepCollectionEquality().equals(other._places, _places) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
@@ -233,8 +257,16 @@ class _$TripImpl implements _Trip {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, description, startDate,
-      endDate, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      name,
+      description,
+      const DeepCollectionEquality().hash(_places),
+      startDate,
+      endDate,
+      createdAt,
+      updatedAt);
 
   /// Create a copy of Trip
   /// with the given fields replaced by the non-null parameter values.
@@ -257,6 +289,7 @@ abstract class _Trip implements Trip {
       {required final int id,
       required final String name,
       final String? description,
+      required final List<Place> places,
       required final DateTime startDate,
       final DateTime? endDate,
       required final DateTime createdAt,
@@ -270,6 +303,8 @@ abstract class _Trip implements Trip {
   String get name;
   @override
   String? get description;
+  @override
+  List<Place> get places;
   @override
   DateTime get startDate;
   @override

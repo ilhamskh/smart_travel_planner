@@ -10,6 +10,9 @@ _$TripImpl _$$TripImplFromJson(Map<String, dynamic> json) => _$TripImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
+      places: (json['places'] as List<dynamic>)
+          .map((e) => Place.fromJson(e as Map<String, dynamic>))
+          .toList(),
       startDate: DateTime.parse(json['startDate'] as String),
       endDate: json['endDate'] == null
           ? null
@@ -23,6 +26,7 @@ Map<String, dynamic> _$$TripImplToJson(_$TripImpl instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'places': instance.places,
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate?.toIso8601String(),
       'createdAt': instance.createdAt.toIso8601String(),

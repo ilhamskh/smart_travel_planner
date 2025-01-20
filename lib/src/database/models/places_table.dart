@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:smart_travel_planner/src/database/models/trip_table.dart';
 
 class PlaceTable extends Table {
   TextColumn get id => text()();
@@ -10,6 +11,7 @@ class PlaceTable extends Table {
   TextColumn get imageUrl => text().nullable()();
   TextColumn get address => text().nullable()();
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
+  IntColumn get tripId => integer().nullable().references(TripTable, #id)();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 }

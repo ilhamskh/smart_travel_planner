@@ -343,33 +343,36 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
   Future<Set<Polyline>> _createRoutes(List<Place> destinations) async {
     if (destinations.length < 2) return {};
 
-    final routes = <Polyline>{};
+    try {
+      // Get last two points for the new route segment
+      final origin = destinations[destinations.length - 2];
+      final destination = destinations.last;
 
-    for (var i = 0; i < destinations.length - 1; i++) {
-      final origin =
-          LatLng(destinations[i].latitude, destinations[i].longitude);
-      final destination =
-          LatLng(destinations[i + 1].latitude, destinations[i + 1].longitude);
+      final routePoints = await _placesRepository.getRouteBetweenPoints(
+        LatLng(origin.latitude, origin.longitude),
+        LatLng(destination.latitude, destination.longitude),
+      );
 
-      try {
-        final routePoints =
-            await _placesRepository.getRouteBetweenPoints(origin, destination);
+      // Create new route segment
+      final newRoute = Polyline(
+        polylineId: PolylineId('route_${origin.id}_${destination.id}'),
+        points: routePoints,
+        color: Colors.blue,
+        width: 5,
+        geodesic: true,
+      );
 
-        routes.add(
-          Polyline(
-            polylineId: PolylineId('route_$i'),
-            points: routePoints,
-            color: Colors.blue,
-            width: 5,
-            geodesic: true,
-          ),
-        );
-      } catch (e) {
-        log('Failed to get route: $e');
+      // Add to existing routes if state has previous routes
+      if (state is _Loaded) {
+        final currentState = state as _Loaded;
+        return {...currentState.routes, newRoute};
       }
-    }
 
-    return routes;
+      return {newRoute};
+    } catch (e) {
+      log('Failed to create route: $e');
+      return {};
+    }
   }
 
   bool _shouldFetchNewPlaces(LatLng newPosition, LatLng? lastPosition) {
@@ -436,43 +439,55 @@ class TripPlannerBloc extends Bloc<TripPlannerEvent, TripPlannerState> {
     ));
   }
 
-  Future<void> _onRemoveDestination(
-      _RemoveDestination event, Emitter<TripPlannerState> emit) async {
-    if (state is! _Loaded) return;
-    final currentState = state as _Loaded;
+  Future<void> _onRemoveDestination(_RemoveDestination event, Emitter<TripPlannerState> emit) async {
+  if (state is! _Loaded) return;
+  final currentState = state as _Loaded;
 
-    try {
-      // Step 1: Remove destination and update markers
-      final destinations = currentState.destinationsMap.values.toList();
-      final updatedState = await _removeDestinationAndMarkers(
-          currentState, destinations[event.index].id);
-      if (!emit.isDone) emit(updatedState);
+  try {
+    // Remove destination
+    final oldDestinations = currentState.destinationsMap.values.toList();
+    final placeId = oldDestinations[event.index].id;
+    final updatedDestinations = Map<String, Place>.from(currentState.destinationsMap)
+      ..remove(placeId);
+    
+    final destinations = updatedDestinations.values.toList();
+    final updatedRoutes = <Polyline>{};
 
-      // Step 2: Recalculate routes
-      final finalState = await _calculateRoutes(updatedState as _Loaded);
-      if (!emit.isDone) emit(finalState);
-    } catch (e) {
-      log('Error removing destination: $e');
-      if (!emit.isDone) emit(currentState);
+    // Rebuild routes for remaining destinations
+    if (destinations.length >= 2) {
+      for (var i = 0; i < destinations.length - 1; i++) {
+        final origin = destinations[i];
+        final destination = destinations[i + 1];
+        
+        final routePoints = await _placesRepository.getRouteBetweenPoints(
+          LatLng(origin.latitude, origin.longitude),
+          LatLng(destination.latitude, destination.longitude),
+        );
+
+        updatedRoutes.add(
+          Polyline(
+            polylineId: PolylineId('route_${origin.id}_${destination.id}'),
+            points: routePoints,
+            color: Colors.blue,
+            width: 5,
+            geodesic: true,
+          ),
+        );
+      }
     }
-  }
 
-  Future<TripPlannerState> _removeDestinationAndMarkers(
-    _Loaded currentState,
-    String placeId,
-  ) async {
-    final updatedDestinations =
-        Map<String, Place>.from(currentState.destinationsMap)..remove(placeId);
-
-    return currentState.copyWith(
+    emit(currentState.copyWith(
       destinationsMap: updatedDestinations,
+      routes: updatedRoutes,
       markers: _createMarkers(
         currentState.nearbyPlacesMap.values.toList(),
-        updatedDestinations.values.toList(),
+        destinations,
       ),
-      isLoading: true,
-    );
+    ));
+  } catch (e) {
+    log('Failed to remove destination: $e');
   }
+}
 
   Marker _createPlaceMarker(Place place) {
     return Marker(

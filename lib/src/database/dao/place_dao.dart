@@ -9,6 +9,14 @@ class PlaceDao extends DatabaseAccessor<AppDatabase> with _$PlaceDaoMixin {
   PlaceDao(super.db);
 
   Future<List<PlaceTableData>> getAllPlaces() => select(placeTable).get();
+  Future<List<PlaceTableData>> getPlacesByTripId(int tripId) {
+    return (select(placeTable)
+      ..where((p) => p.tripId.equals(tripId))
+      ..orderBy([
+        (t) => OrderingTerm(expression: t.createdAt),
+      ]))
+      .get();
+  }
 
   Stream<List<PlaceTableData>> watchAllPlaces() => select(placeTable).watch();
 

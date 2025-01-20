@@ -48,6 +48,7 @@ class PlaceDao extends DatabaseAccessor<AppDatabase> with _$PlaceDaoMixin {
     });
   }
 
+
   Future<bool> updatePlace(PlaceTableData place) =>
       update(placeTable).replace(place);
 

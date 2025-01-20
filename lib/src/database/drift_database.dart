@@ -14,7 +14,6 @@ part 'drift_database.g.dart';
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    // Put the database file in the documents directory
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'travel_planner.db'));
     return NativeDatabase(file);
